@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+
+android {
+    def androidId = rootProject.ext.androidId
+    def appId = rootProject.ext.appId
+
+    compileSdkVersion androidId.compileSdkVersion
+    buildToolsVersion androidId.buildToolsVersion
+
+    defaultConfig {
+        applicationId appId.applicationId_app
+        minSdkVersion androidId.defaultConfig.minSdkVersion
+        targetSdkVersion androidId.defaultConfig.targetSdkVersion
+        versionCode androidId.defaultConfig.versionCode
+        versionName androidId.defaultConfig.versionName
+        testInstrumentationRunner androidId.defaultConfig.testInstrumentationRunner
+
+        buildConfigField ( "boolean", "debug", "${isRelease}")
+        if ( isRelease ){
+            buildConfigField ( "String", "releaseUrl", "\"${url.releaseUrl}\"")
+        } else {
+            buildConfigField ( "String", "debugUrl", "\"${url.debugUrl}\"")
+        }
+    }
+
+    buildTypes {
+        debug {
+//            buildConfigField ( "String", "debugUrl", "\"${url.debugUrl}\"")
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//            buildConfigField ( "String", "releaseUrl", "\"${url.releaseUrl}\"")
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    def dependency_base = rootProject.ext.dependency_base
+    def dependency_test_base = rootProject.ext.dependency_base
+    def dependency_android_test_base = rootProject.ext.dependency_base
+    dependency_base.each { k, v -> implementation v }
+    dependency_test_base.each { k, v -> testImplementation v }
+    dependency_android_test_base.each { k, v -> androidTestImplementation v }
+
+    if (isRelease){
+        implementation(':sub_module1')
+        implementation(':sub_module2')
+    }
+}

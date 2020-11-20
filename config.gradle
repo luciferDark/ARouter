@@ -1,0 +1,66 @@
+/**
+ *  全局常量
+ */
+ext {
+    /**
+     *  是否是正式包
+     */
+    isRelease = false
+//    isRelease = true
+    /**
+     *  全局的安卓版本报包名相关配置
+     */
+    androidId = [
+            compileSdkVersion                  : 29,
+            buildToolsVersion                    : "29.0.3",
+            defaultConfig : [
+                minSdkVersion                     : 19,
+                targetSdkVersion                 : 29,
+                versionCode                         : 1,
+                versionName                        : "1.0",
+                testInstrumentationRunner   : "androidx.test.runner.AndroidJUnitRunner",
+            ],
+    ]
+    /**
+     *  包名定义
+     */
+    appId = [
+            applicationId_app                     : "com.ll.arouter",
+            applicationId_sub1                    : "com.ll.sub_module1",
+            applicationId_sub2                    : "com.ll.sub_module2",
+    ]
+    /**
+     *  依赖库版本
+     */
+    dependency_version = [
+            appcompat                               : "1.2.0",
+            constraintlayout                        : "2.0.4",
+            junit                                           : "4.12",
+            junitExt                                      : "1.1.2",
+            espresso_core                           : "3.3.0",
+    ]
+    /**
+     *  依赖库
+     */
+    dependency_test_base = [
+            junit : "junit:junit:${dependency_version.junit}",
+    ]
+    dependency_android_test_base = [
+            junitExt : "androidx.test.ext:junit:${dependency_version.junitExt}",
+            espresso_core : "androidx.test.espresso:espresso-core:${dependency_version.espresso_core}",
+    ]
+    dependency_base = [
+            appcompat : "androidx.appcompat:appcompat:${dependency_version.appcompat}",
+            constraintlayout : "androidx.constraintlayout:constraintlayout:${dependency_version.constraintlayout}",
+    ]
+    dependency = [
+    ]
+
+    /**
+     *  url
+     */
+    url = [
+            releaseUrl : "http://127.0.0.1/release",
+            debugUrl : "http://127.0.0.1/debug",
+    ]
+}
