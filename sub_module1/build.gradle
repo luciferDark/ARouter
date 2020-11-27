@@ -1,7 +1,6 @@
 if (isRelease){
     apply plugin: 'com.android.library'
 } else {
-    println(" is debug - application ")
     apply plugin: 'com.android.application'
 }
 android {
@@ -34,8 +33,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     def dependency_base = rootProject.ext.dependency_base
-    def dependency_test_base = rootProject.ext.dependency_base
-    def dependency_android_test_base = rootProject.ext.dependency_base
+    def dependency_test_base = rootProject.ext.dependency_test_base
+    def dependency_android_test_base = rootProject.ext.dependency_android_test_base
     dependency_base.each { k, v -> implementation v }
     dependency_test_base.each { k, v -> testImplementation v }
     dependency_android_test_base.each { k, v -> androidTestImplementation v }
