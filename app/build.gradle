@@ -39,6 +39,8 @@ dependencies {
     dependency_test_base.each { k, v -> testImplementation v }
     dependency_android_test_base.each { k, v -> androidTestImplementation v }
 
+
+    implementation project(':arouter_annotation')
     if (isRelease){
         implementation project(':sub_module1')
         implementation project(':sub_module2')

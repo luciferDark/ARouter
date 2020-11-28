@@ -52,4 +52,6 @@ dependencies {
     dependency_base.each { k, v -> implementation v }
     dependency_test_base.each { k, v -> testImplementation v }
     dependency_android_test_base.each { k, v -> androidTestImplementation v }
+
+    implementation project(':arouter_annotation')
 }
