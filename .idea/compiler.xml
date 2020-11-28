@@ -18,6 +18,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="arouter_annotation" target="1.7" />
       <module name="arouter_process" target="1.7" />
     </bytecodeTargetLevel>
   </component>
