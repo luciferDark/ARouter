@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ll.sub_module2">
 
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true"/>
 </manifest>
