@@ -2,6 +2,17 @@ apply plugin: 'java-library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':arouter_process')
+    def dependency_apt = rootProject.ext.dependency_apt
+    dependency_apt.each { k, v ->
+        if (k == 'auto_service'){
+            compileOnly v
+            annotationProcessor v
+        } else {
+            implementation  v
+        }
+    }
 }
 
 sourceCompatibility = "1.7"

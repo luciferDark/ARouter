@@ -37,6 +37,8 @@ ext {
             junit                                           : "4.12",
             junitExt                                      : "1.1.2",
             espresso_core                           : "3.3.0",
+            auto_service                              : "1.0-rc4",
+            javapoet                                    : "1.13.0",
     ]
     /**
      *  依赖库
@@ -51,6 +53,10 @@ ext {
     dependency_base = [
             appcompat : "androidx.appcompat:appcompat:${dependency_version.appcompat}",
             constraintlayout : "androidx.constraintlayout:constraintlayout:${dependency_version.constraintlayout}",
+    ]
+    dependency_apt = [
+            auto_service : "com.google.auto.service:auto-service:${dependency_version.auto_service}",
+            javapoet : "com.squareup:javapoet:${dependency_version.javapoet}"
     ]
     dependency = [
     ]
