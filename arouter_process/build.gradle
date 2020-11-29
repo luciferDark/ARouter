@@ -6,9 +6,11 @@ dependencies {
     def dependency_apt = rootProject.ext.dependency_apt
     dependency_apt.each { k, v ->
         if (k == 'auto_service'){
+            println("auto_service:" + k + v)
             compileOnly v
             annotationProcessor v
         } else {
+            println("implementation:" + k + v)
             implementation  v
         }
     }

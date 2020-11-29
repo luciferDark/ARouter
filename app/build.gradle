@@ -18,6 +18,15 @@ android {
         buildConfigField ( "boolean", "debug", "${isRelease}")
         buildConfigField ( "String", "releaseUrl", "\"${url.releaseUrl}\"")
         buildConfigField ( "String", "debugUrl", "\"${url.debugUrl}\"")
+
+        // 可以用于传递参数到java注解编译工程中去
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        appName : appId.applicationId_app
+                ]
+            }
+        }
     }
 
     buildTypes {
@@ -39,10 +48,12 @@ dependencies {
     dependency_test_base.each { k, v -> testImplementation v }
     dependency_android_test_base.each { k, v -> androidTestImplementation v }
 
-
-    implementation project(':arouter_annotation')
     if (isRelease){
         implementation project(':sub_module1')
         implementation project(':sub_module2')
     }
+
+    implementation project(':arouter_annotation')
+    // 依赖注解处理器 注解处理器才能工作
+    annotationProcessor project(":arouter_process")
 }
