@@ -6,7 +6,6 @@ ext {
      *  是否是正式包
      */
     isRelease = false
-//    isRelease = true
     /**
      *  全局的安卓版本报包名相关配置
      */
