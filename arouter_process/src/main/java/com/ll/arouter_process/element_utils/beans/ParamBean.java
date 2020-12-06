@@ -1,7 +1,8 @@
 package com.ll.arouter_process.element_utils.beans;
 
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+
+import javax.lang.model.element.Modifier;
 
 public class ParamBean {
     private Type paramType;
