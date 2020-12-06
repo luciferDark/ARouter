@@ -89,7 +89,7 @@ public class ArouterProcess extends AbstractProcessor {
 
             MethodSpec method = MethodUtils.createPublicVoidMethod(
                     "onCreate",
-                    params);
+                    params,null);
 
             List methods = new ArrayList();
             methods.add(method);

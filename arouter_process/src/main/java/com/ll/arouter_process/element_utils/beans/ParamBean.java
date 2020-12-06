@@ -4,6 +4,9 @@ import java.lang.reflect.Type;
 
 import javax.lang.model.element.Modifier;
 
+/**
+ * 参数bean
+ */
 public class ParamBean {
     private Type paramType;
     private String paramName;
@@ -30,6 +33,15 @@ public class ParamBean {
     }
 
     public void setParamModifider(Modifier[] paramModifider) {
+        this.paramModifider = paramModifider;
+    }
+
+    public ParamBean() {
+    }
+
+    public ParamBean(Type paramType, String paramName, Modifier[] paramModifider) {
+        this.paramType = paramType;
+        this.paramName = paramName;
         this.paramModifider = paramModifider;
     }
 }
