@@ -26,6 +26,11 @@ public class StatementBean {
     public StatementBean() {
     }
 
+    public StatementBean(String statementFormat) {
+        this.statementFormat = statementFormat;
+        this.args = null;
+    }
+
     public StatementBean(String statementFormat, Object[] args) {
         this.statementFormat = statementFormat;
         this.args = args;

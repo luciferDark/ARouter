@@ -5,14 +5,15 @@ import com.ll.arouter_annotation.ARouter;
 import com.ll.arouter_process.element_utils.ClassUtils;
 import com.ll.arouter_process.element_utils.FileWriteUtils;
 import com.ll.arouter_process.element_utils.MethodUtils;
+import com.ll.arouter_process.element_utils.factories.ListFactory;
 import com.ll.arouter_process.element_utils.beans.ParamBean;
+import com.ll.arouter_process.element_utils.beans.StatementBean;
+import com.ll.arouter_process.element_utils.factories.MethodFactory;
 import com.ll.arouter_process.utils.Contents;
 import com.ll.arouter_process.utils.LogUtils;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ import javax.annotation.processing.SupportedOptions;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -79,29 +81,36 @@ public class ArouterProcess extends AbstractProcessor {
         for (Element item : elements) {
             String clazzName = item.getSimpleName().toString();
             LogUtils.logD("开始处理类:" + clazzName);
+            //method
+            ListFactory<ParamBean> paramBeanListFactory = new ListFactory<ParamBean>();
+            paramBeanListFactory.addBean(new ParamBean(String[].class, "params"))
+                    .addBean(new ParamBean(String.class, "name"));
 
-            ParamBean paramBean = new ParamBean();
-            paramBean.setParamType(String[].class);
-            paramBean.setParamName("params");
-
-            List params = new ArrayList();
-            params.add(paramBean);
+            ListFactory<StatementBean> statementBeanListFactory = new ListFactory<StatementBean>();
+            statementBeanListFactory.addBean(
+                    new StatementBean("$T.out.println($S)",
+                            new Object[]{System.class, "test"}));
 
             MethodSpec method = MethodUtils.createPublicVoidMethod(
                     "onCreate",
-                    params,null);
+                    paramBeanListFactory.getList(),
+                    statementBeanListFactory.getList());
 
-            List methods = new ArrayList();
-            methods.add(method);
-
+            ListFactory<MethodSpec> methodSpecListFactory = new ListFactory<MethodSpec>();
+            methodSpecListFactory.addBean(method)
+                    .addBean(new MethodFactory().createPublicStaticVoidMethodBuilder("TestPrint")
+                            .addParamModife(String.class, "arg1", Modifier.FINAL)
+                            .addParam(String.class, "arg2")
+                            .addStatementArgs("$T.out.println($S)", System.class, "MethodFactory test  11")
+                            .addStatementArgs("$T.out.println($S)", System.class, "MethodFactory test  22")
+                            .build());
+            //class
             TypeSpec clazz = ClassUtils.createPublicClassBuilder(clazzName + "$$AutoCLazz",
-                    methods).build();
+                    methodSpecListFactory.getList()).build();
             FileWriteUtils.writeJavaFile(
                     "com.ll.auto.code",
                     clazz,
                     filer);
         }
-
-
     }
 }

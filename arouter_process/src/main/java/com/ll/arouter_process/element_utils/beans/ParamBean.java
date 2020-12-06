@@ -39,6 +39,13 @@ public class ParamBean {
     public ParamBean() {
     }
 
+    public ParamBean(Type paramType, String paramName) {
+        this.paramType = paramType;
+        this.paramName = paramName;
+        this.paramModifider = null;
+
+    }
+
     public ParamBean(Type paramType, String paramName, Modifier[] paramModifider) {
         this.paramType = paramType;
         this.paramName = paramName;
