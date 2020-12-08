@@ -1,6 +1,7 @@
 package com.ll.arouter_process.element_utils.factories;
 
 import com.ll.arouter_process.element_utils.MethodUtils;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.MethodSpec;
 
 import java.lang.reflect.Type;
@@ -40,6 +41,14 @@ public class MethodFactory {
 
     public MethodFactory addParam(Type type, String name) {
         return addParamModife(type, name);
+    }
+
+    public MethodFactory addAnnotation(Class<?> type) {
+        if (null == builder) {
+            return this;
+        }
+        builder.addAnnotation(AnnotationSpec.builder(type).build());
+        return this;
     }
 
     public MethodFactory addParamModife(Type type, String name, Modifier... modifiers) {

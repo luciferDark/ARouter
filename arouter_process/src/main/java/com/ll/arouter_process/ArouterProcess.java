@@ -99,6 +99,7 @@ public class ArouterProcess extends AbstractProcessor {
             ListFactory<MethodSpec> methodSpecListFactory = new ListFactory<MethodSpec>();
             methodSpecListFactory.addBean(method)
                     .addBean(new MethodFactory().createPublicStaticVoidMethodBuilder("TestPrint")
+//                            .addAnnotation(Override.class)
                             .addParamModife(String.class, "arg1", Modifier.FINAL)
                             .addParam(String.class, "arg2")
                             .addStatementArgs("$T.out.println($S)", System.class, "MethodFactory test  11")
