@@ -8,7 +8,7 @@ import android.util.Log;
 import com.ll.arouter_annotation.ARouter;
 
 @ARouter(path = "MainActivity")
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

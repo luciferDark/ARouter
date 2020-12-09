@@ -1,7 +1,11 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 
 android {
     def androidId = rootProject.ext.androidId
+    def appId = rootProject.ext.appId
+
     compileSdkVersion androidId.compileSdkVersion
     buildToolsVersion androidId.buildToolsVersion
 
@@ -11,6 +15,7 @@ android {
         versionCode androidId.defaultConfig.versionCode
         versionName androidId.defaultConfig.versionName
         testInstrumentationRunner androidId.defaultConfig.testInstrumentationRunner
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -18,6 +23,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -30,5 +39,5 @@ dependencies {
     dependency_test_base.each { k, v -> testImplementation v }
     dependency_android_test_base.each { k, v -> androidTestImplementation v }
 
-    api project(path: ':arouter_api')
+    implementation project(':arouter_annotation')
 }

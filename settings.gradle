@@ -4,5 +4,6 @@ include ':sub_module1'                           // sub1工程
 include ':sub_module2'                           // sub2工程
 include ':arouter_process'                       // 注解处理器工程
 include ':arouter_annotation'                  // 注解
+include ':arouter_api'
 // 注解工程
 rootProject.name = "ARouter"
