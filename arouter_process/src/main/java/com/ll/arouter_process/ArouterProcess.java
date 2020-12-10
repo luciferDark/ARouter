@@ -9,6 +9,7 @@ import com.ll.arouter_process.element_utils.factories.ListFactory;
 import com.ll.arouter_process.element_utils.beans.ParamBean;
 import com.ll.arouter_process.element_utils.beans.StatementBean;
 import com.ll.arouter_process.element_utils.factories.MethodFactory;
+import com.ll.arouter_process.itemProcess.ArouterPathProcess;
 import com.ll.arouter_process.utils.Contents;
 import com.ll.arouter_process.utils.LogUtils;
 import com.squareup.javapoet.MethodSpec;
@@ -40,7 +41,6 @@ import javax.lang.model.util.Types;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)//服务版本
 @SupportedAnnotationTypes({Contents.ANNOTATIONS_AROUTER})
 public class ArouterProcess extends AbstractProcessor {
-
     private Elements elements;
     private Types types;
     private Filer filer;
@@ -70,9 +70,15 @@ public class ArouterProcess extends AbstractProcessor {
             LogUtils.logD("注解编辑器获取的set集合为空，停止工作");
             return true;
         }
-
-        test(set, roundEnvironment);
+//        test(set, roundEnvironment);
+        processArouter(roundEnvironment);
         return true;
+    }
+
+    private void processArouter(RoundEnvironment roundEnvironment) {
+        ArouterPathProcess process = new ArouterPathProcess(elements,
+                types, filer, roundEnvironment);
+        process.process();
     }
 
     private void test(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {

@@ -12,60 +12,44 @@ public class ArouterBean {
     private String group;//路由组
     private String path;//路由地址
 
-    public Type getType() {
-        return type;
+    private ArouterBean() {
     }
 
-    public ArouterBean setType(Type type) {
-        this.type = type;
-        return this;
+    public Type getType() {
+        return type;
     }
 
     public Element getElement() {
         return element;
     }
 
-    public ArouterBean setElement(Element element) {
-        this.element = element;
-        return this;
-    }
-
     public Class<?> getClazz() {
         return clazz;
-    }
-
-    public ArouterBean setClazz(Class<?> clazz) {
-        this.clazz = clazz;
-        return this;
     }
 
     public String getGroup() {
         return group;
     }
 
-    public ArouterBean setGroup(String group) {
-        this.group = group;
-        return this;
-    }
-
     public String getPath() {
         return path;
     }
 
-    public ArouterBean setPath(String path) {
-        this.path = path;
-        return this;
+    private ArouterBean(Builder builder) {
+        this.type = builder.type;
+        this.element = builder.element;
+        this.clazz = builder.clazz;
+        this.group = builder.group;
+        this.path = builder.path;
     }
 
-    public ArouterBean() {
-    }
-
-    public ArouterBean(Type type, Element element, Class<?> clazz, String group, String path) {
-        this.type = type;
-        this.element = element;
-        this.clazz = clazz;
-        this.group = group;
-        this.path = path;
+    @Override
+    public String toString() {
+        return "ArouterBean{" +
+                "element=" + element +
+                ", group='" + group + '\'' +
+                ", path='" + path + '\'' +
+                '}';
     }
 
     public enum Type {
@@ -73,5 +57,66 @@ public class ArouterBean {
         FRAGMENT,
         SERVICE,
         PROVIDER,
+    }
+
+    public static  class Builder{
+        private Type type;//类型
+        private Element element;//类操作符
+        private Class<?> clazz;//跳转类
+        private String group;//路由组
+        private String path;//路由地址
+
+        public Type getType() {
+            return type;
+        }
+
+        public Builder setType(Type type) {
+            this.type = type;
+            return this;
+        }
+
+        public Element getElement() {
+            return element;
+        }
+
+        public Builder setElement(Element element) {
+            this.element = element;
+            return this;
+        }
+
+        public Class<?> getClazz() {
+            return clazz;
+        }
+
+        public Builder setClazz(Class<?> clazz) {
+            this.clazz = clazz;
+            return this;
+        }
+
+        public String getGroup() {
+            return group;
+        }
+
+        public Builder setGroup(String group) {
+            this.group = group;
+            return this;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public Builder setPath(String path) {
+            this.path = path;
+            return this;
+        }
+
+        public ArouterBean builder(){
+            if (null == path || 0 >= path.length()){
+                throw new RuntimeException("you must set path first,just like \"/app/activity1\"");
+            }
+
+            return new ArouterBean(this);
+        }
     }
 }

@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.ll.arouter_annotation.ARouter;
 
-@ARouter(path = "MainActivity")
+@ARouter(path = "/app/MainActivity")
 public class MainActivity extends AppCompatActivity{
 
     @Override
