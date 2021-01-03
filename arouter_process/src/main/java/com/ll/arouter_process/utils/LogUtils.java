@@ -60,7 +60,11 @@ public class LogUtils {
         }
         StringBuffer buffer = new StringBuffer();
         for (String item : msg){
-            buffer.append(item + "  ");
+            if (item != null){
+                buffer.append(item + "  ");
+            } else {
+                buffer.append("\t" + "  ");
+            }
         }
         log(kind, buffer.toString());
     }

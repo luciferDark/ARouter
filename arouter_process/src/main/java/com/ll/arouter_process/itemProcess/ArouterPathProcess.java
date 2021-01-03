@@ -7,16 +7,12 @@ import com.ll.arouter_process.utils.LogUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
@@ -62,11 +58,11 @@ public class ArouterPathProcess {
             String classFullName = typeName.toString();
 
             try {
-                LogUtils.logD("item packageName", packageName,
-                        "className", className,
-                        "classFullName", classFullName,
-                        "router group", aRouter.group(),
-                        "router path", aRouter.path());
+                LogUtils.logD("item packageName:", packageName,
+                        "className:", className,
+                        "classFullName:", classFullName,
+                        "router group:", aRouter.group(),
+                        "router path:", aRouter.path());
                 ArouterBean.Builder builder = new ArouterBean.Builder()
                         .setElement(item)
                         .setGroup(aRouter.group())
@@ -86,6 +82,9 @@ public class ArouterPathProcess {
                 }
 
                 checkAroutPathFormat(arouterBean);
+
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -96,6 +95,8 @@ public class ArouterPathProcess {
     public void checkAroutPathFormat(ArouterBean arouterBean) {
         String path = arouterBean.getPath();
         String group = arouterBean.getGroup();
+        LogUtils.logD("path:", path);
+        LogUtils.logD("group:", group);
 
         if (null == path || 0 >= path.length() || !path.startsWith("/")){
             LogUtils.logE("input the error path,like:\"/app/Activity\"");
@@ -108,6 +109,9 @@ public class ArouterPathProcess {
         }
 
         String finalGroup = path.substring(1, path.indexOf("/", 1));
-        LogUtils.logE("finalGroup", finalGroup);
+        LogUtils.logD("finalGroup", finalGroup);
+        if(null == group || group.length() <= 0){
+            group = finalGroup;
+        }
     }
 }
