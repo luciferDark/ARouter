@@ -3,6 +3,7 @@ package com.ll.arouter_process.element_utils.factories;
 import com.ll.arouter_process.element_utils.MethodUtils;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
 
 import java.lang.reflect.Type;
 
@@ -39,6 +40,26 @@ public class MethodFactory {
         return this;
     }
 
+    public MethodFactory createProtectedStaticVoidMethodBuilder(String methodName) {
+        builder = MethodUtils.createProtectedStaticVoidMethodBuilder(methodName, null, null);
+        return this;
+    }
+
+    public MethodFactory createPublicMethodBuilder(String methodName) {
+        builder = MethodUtils.createPublicMethodBuilder(methodName, null, null);
+        return this;
+    }
+
+    public MethodFactory createPrivateMethodBuilder(String methodName) {
+        builder = MethodUtils.createPrivateMethodBuilder(methodName, null, null);
+        return this;
+    }
+
+    public MethodFactory createProtectedMethodBuilder(String methodName) {
+        builder = MethodUtils.createProtectedMethodBuilder(methodName, null, null);
+        return this;
+    }
+
     public MethodFactory addParam(Type type, String name) {
         return addParamModife(type, name);
     }
@@ -56,6 +77,13 @@ public class MethodFactory {
             return this;
         }
         builder.addParameter(type, name, modifiers);
+        return this;
+    }
+    public MethodFactory returns(TypeName typeName) {
+        if (null == builder) {
+            return this;
+        }
+        builder.returns(typeName);
         return this;
     }
 

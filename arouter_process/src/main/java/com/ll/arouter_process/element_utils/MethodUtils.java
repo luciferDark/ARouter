@@ -60,6 +60,23 @@ public class MethodUtils {
     }
 
     /**
+     * 创建private 方法构造器
+     *
+     * @param methodName
+     * @param paramBeans
+     * @return
+     */
+    public static MethodSpec.Builder createPrivateMethodBuilder(String methodName,
+                                                                List<ParamBean> paramBeans,
+                                                                List<StatementBean> statementBeans) {
+        MethodSpec.Builder builder = createMethodBuilder(methodName,
+                paramBeans,
+                statementBeans);
+        builder.addModifiers(Modifier.PRIVATE);
+        return builder;
+    }
+
+    /**
      * 创建private static无返回值无参数方法
      *
      * @param methodName
@@ -150,6 +167,67 @@ public class MethodUtils {
     }
 
     /**
+     * 创建protected 方法构造器
+     *
+     * @param methodName
+     * @param paramBeans
+     * @return
+     */
+    public static MethodSpec.Builder createProtectedMethodBuilder(String methodName,
+                                                                  List<ParamBean> paramBeans,
+                                                                  List<StatementBean> statementBeans) {
+        MethodSpec.Builder builder = createMethodBuilder(methodName,
+                paramBeans,
+                statementBeans);
+        builder.addModifiers(Modifier.PROTECTED);
+        return builder;
+    }
+
+    /**
+     * 创建protected static无返回值无参数方法
+     *
+     * @param methodName
+     * @return
+     */
+    public static MethodSpec createProtectedStaticVoidNullParamsMethod(String methodName,
+                                                                     List<StatementBean> statementBeans) {
+        return createProtectedStaticVoidMethod(methodName,
+                null,
+                statementBeans);
+    }
+
+    /**
+     * 创建protected static无返回值方法
+     *
+     * @param methodName
+     * @param paramBeans
+     * @return
+     */
+    public static MethodSpec createProtectedStaticVoidMethod(String methodName,
+                                                           List<ParamBean> paramBeans,
+                                                           List<StatementBean> statementBeans) {
+        return createProtectedStaticVoidMethodBuilder(methodName,
+                paramBeans,
+                statementBeans).build();
+    }
+
+    /**
+     * 创建protected static无返回值方法构造器
+     *
+     * @param methodName
+     * @param paramBeans
+     * @return
+     */
+    public static MethodSpec.Builder createProtectedStaticVoidMethodBuilder(String methodName,
+                                                                          List<ParamBean> paramBeans,
+                                                                          List<StatementBean> statementBeans) {
+        MethodSpec.Builder builder = createProtectedVoidMethodBuilder(methodName,
+                paramBeans,
+                statementBeans);
+        builder.addModifiers(Modifier.STATIC);
+        return builder;
+    }
+    /**
      * 创建public无返回值无参数方法
      *
      * @param methodName
@@ -236,6 +314,23 @@ public class MethodUtils {
                 paramBeans,
                 statementBeans);
         builder.addModifiers(Modifier.STATIC);
+        return builder;
+    }
+
+    /**
+     * 创建public 方法构造器
+     *
+     * @param methodName
+     * @param paramBeans
+     * @return
+     */
+    public static MethodSpec.Builder createPublicMethodBuilder(String methodName,
+                                                               List<ParamBean> paramBeans,
+                                                               List<StatementBean> statementBeans) {
+        MethodSpec.Builder builder = createMethodBuilder(methodName,
+                paramBeans,
+                statementBeans);
+        builder.addModifiers(Modifier.PUBLIC);
         return builder;
     }
 

@@ -47,6 +47,7 @@ public class ArouterBean {
     public String toString() {
         return "ArouterBean{" +
                 "element=" + element +
+                ", clazz='" + clazz.toString() + '\'' +
                 ", group='" + group + '\'' +
                 ", path='" + path + '\'' +
                 '}';
