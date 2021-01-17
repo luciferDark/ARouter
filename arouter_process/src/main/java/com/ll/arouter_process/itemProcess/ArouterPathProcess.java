@@ -2,12 +2,17 @@ package com.ll.arouter_process.itemProcess;
 
 import com.ll.arouter_annotation.ARouter;
 import com.ll.arouter_annotation.beans.ArouterBean;
+import com.ll.arouter_process.element_utils.ClassUtils;
+import com.ll.arouter_process.element_utils.FileWriteUtils;
+import com.ll.arouter_process.element_utils.factories.ListFactory;
 import com.ll.arouter_process.element_utils.factories.MethodFactory;
 import com.ll.arouter_process.utils.Contents;
 import com.ll.arouter_process.utils.LogUtils;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,9 +50,19 @@ public class ArouterPathProcess {
         this.types = types;
         this.filer = filer;
         this.roundEnvironment = roundEnvironment;
-
+        if (null == elements){
+            LogUtils.logW("elements is null");
+        } else {
+            LogUtils.logD("elements is not null:");
+        }
         paths = new HashMap<>();
-        pathTypeElement = this.elements.getTypeElement(Contents.CLASSNAME_AROUTERPATH);
+        pathTypeElement = elements.getTypeElement(Contents.CLASSNAME_AROUTERPATH);
+            LogUtils.logD("pathTypeElement name is:", Contents.CLASSNAME_AROUTERPATH);
+        if (null == pathTypeElement){
+            LogUtils.logW("pathTypeElement is null");
+        } else {
+            LogUtils.logD("pathTypeElement is :", pathTypeElement.getSimpleName().toString());
+        }
     }
 
     public void process() {
@@ -125,13 +140,14 @@ public class ArouterPathProcess {
         for (Map.Entry<String, List<ArouterBean>> entry : paths.entrySet()) {
             String group = entry.getKey();
             List<ArouterBean> arouterBeanList = entry.getValue();
-            handlerArouterBean(arouterBeanList);
+            handlerArouterBean(group, arouterBeanList);
         }
     }
 
     /**
      * 处理每个routerBean
      *
+     * @param group
      * @param arouterBean
      * @override public  Map<String, ArouterBean> getPathMap(){
      * Map<String, ArouterBean> map = new HashMap<>();
@@ -139,7 +155,7 @@ public class ArouterPathProcess {
      * return map;
      * }
      */
-    private void handlerArouterBean(List<ArouterBean> arouterBean) {
+    private void handlerArouterBean(String group, List<ArouterBean> arouterBean) {
         //  创建返回值
         TypeName returnType = ParameterizedTypeName.get(
                 ClassName.get(Map.class),
@@ -159,20 +175,18 @@ public class ArouterPathProcess {
             @Override
             public void accept(ArouterBean arouterBean) {
                 if (arouterBean != null) {
-//                    new ArouterBean.Builder()
-//                            .setElement(item)
-//                            .setGroup(aRouter.group())
-//                            .setPath(aRouter.path());
-
                     LogUtils.logD("handlerArouterBean:", arouterBean.toString());
-                    methodFactory.addStatementArgs("$N.put($S, new $T" +
-                                    ".setClazz($T.class).setGroup($S).setPath($S).setType($T.$L).builder())",
+                    methodFactory.addStatementArgs(
+//                            "$N.put($S, new $T()" +
+//                                    ".setClazz($T.class).setGroup($S).setPath($S).setType($T.$L).builder())",
+//                            (String group, String path, Class<?> clazz, ArouterBean.Type type) {
+                            "$N.put($S, new $T($S, $S, $T.class, $T.$L).builder())",
                             Contants.PathMethod_Var1,
-                            arouterBean.getGroup(),
+                            arouterBean.getPath(),
                             ClassName.get(ArouterBean.Builder.class),
-                            ClassName.get((Type) arouterBean.getElement()),
                             arouterBean.getGroup(),
                             arouterBean.getPath(),
+                            ClassName.get((TypeElement) arouterBean.getElement()),
                             ClassName.get(ArouterBean.Type.class),
                             arouterBean.getType());
                 }
@@ -180,6 +194,29 @@ public class ArouterPathProcess {
         });
 
         methodFactory.addStatementArgs("return $N", Contants.PathMethod_Var1);
+
+        handlerPathClass(group, methodFactory);
+    }
+
+    /**
+     * 生成对应的类
+     *
+     * @param group
+     * @param methodFactory
+     */
+    private void handlerPathClass(String group, MethodFactory methodFactory) {
+        String clazzName = Contants.PathClassNameFixed + group;
+        LogUtils.logD(">>output class name is :", clazzName);
+        ListFactory<MethodSpec> methodSpecListFactory = new ListFactory<MethodSpec>();
+        methodSpecListFactory.addBean(methodFactory.build());
+        TypeSpec clazz = ClassUtils.createPublicClassBuilder(clazzName + "$$AutoCLazz",
+                methodSpecListFactory.getList())
+                .addSuperinterface(ClassName.get(pathTypeElement))
+                .build();
+        FileWriteUtils.writeJavaFile(
+                Contents.PACKAGE_AROUTE,
+                clazz,
+                filer);
     }
 
     /**
@@ -208,13 +245,14 @@ public class ArouterPathProcess {
         LogUtils.logD("finalGroup", finalGroup);
         if (null == group || group.length() <= 0) {
             group = finalGroup;
+            arouterBean.setGroup(group);
         }
         return true;
     }
 
-
     private final class Contants {
         public final static String PathMethodName = "getPathMap";
         public final static String PathMethod_Var1 = "mBeans";
+        public final static String PathClassNameFixed = "ARouter$$Path$$";
     }
 }

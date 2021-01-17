@@ -35,6 +35,10 @@ public class ArouterBean {
         return path;
     }
 
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
     private ArouterBean(Builder builder) {
         this.type = builder.type;
         this.element = builder.element;
@@ -60,7 +64,7 @@ public class ArouterBean {
         PROVIDER,
     }
 
-    public static  class Builder{
+    public static  class  Builder{
         private Type type;//类型
         private Element element;//类操作符
         private Class<?> clazz;//跳转类
@@ -110,6 +114,16 @@ public class ArouterBean {
         public Builder setPath(String path) {
             this.path = path;
             return this;
+        }
+
+        public Builder() {
+        }
+
+        public Builder(String group, String path, Class<?> clazz, Type type) {
+            this.type = type;
+            this.clazz = clazz;
+            this.group = group;
+            this.path = path;
         }
 
         public ArouterBean builder(){
