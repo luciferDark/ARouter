@@ -14,7 +14,6 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +39,7 @@ public class ArouterPathProcess {
     private RoundEnvironment roundEnvironment;
 
     public Map<String, List<ArouterBean>> paths;
+    public Map<String, String> groups;
 
     TypeElement pathTypeElement;
 
@@ -50,15 +50,16 @@ public class ArouterPathProcess {
         this.types = types;
         this.filer = filer;
         this.roundEnvironment = roundEnvironment;
-        if (null == elements){
+        if (null == elements) {
             LogUtils.logW("elements is null");
         } else {
             LogUtils.logD("elements is not null:");
         }
         paths = new HashMap<>();
+        groups = new HashMap<>();
         pathTypeElement = elements.getTypeElement(Contents.CLASSNAME_AROUTERPATH);
-            LogUtils.logD("pathTypeElement name is:", Contents.CLASSNAME_AROUTERPATH);
-        if (null == pathTypeElement){
+        LogUtils.logD("pathTypeElement name is:", Contents.CLASSNAME_AROUTERPATH);
+        if (null == pathTypeElement) {
             LogUtils.logW("pathTypeElement is null");
         } else {
             LogUtils.logD("pathTypeElement is :", pathTypeElement.getSimpleName().toString());
@@ -142,6 +143,8 @@ public class ArouterPathProcess {
             List<ArouterBean> arouterBeanList = entry.getValue();
             handlerArouterBean(group, arouterBeanList);
         }
+
+        handlerGroup();
     }
 
     /**
@@ -206,7 +209,7 @@ public class ArouterPathProcess {
      */
     private void handlerPathClass(String group, MethodFactory methodFactory) {
         String clazzName = Contants.PathClassNameFixed + group;
-        LogUtils.logD(">>output class name is :", clazzName);
+        LogUtils.logD(">>output path class name is :", clazzName);
         ListFactory<MethodSpec> methodSpecListFactory = new ListFactory<MethodSpec>();
         methodSpecListFactory.addBean(methodFactory.build());
         TypeSpec clazz = ClassUtils.createPublicClassBuilder(
@@ -218,7 +221,27 @@ public class ArouterPathProcess {
                 Contents.PACKAGE_AROUTE,
                 clazz,
                 filer);
+
+        if (groups.get(group) == null && clazzName != null && clazzName.length() >= 0) {
+            groups.put(group, clazzName);
+        }
     }
+
+    /**
+     * 处理group组信息
+     */
+    private void handlerGroup() {
+        ArouterGroupProgress groupProgress = new ArouterGroupProgress(
+                this.elements,
+                this.types,
+                this.filer,
+                this.groups,
+                this.pathTypeElement,
+                this.roundEnvironment
+        );
+        groupProgress.process();
+    }
+
 
     /**
      * 检查bean是否合格
