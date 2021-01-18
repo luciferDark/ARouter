@@ -209,7 +209,8 @@ public class ArouterPathProcess {
         LogUtils.logD(">>output class name is :", clazzName);
         ListFactory<MethodSpec> methodSpecListFactory = new ListFactory<MethodSpec>();
         methodSpecListFactory.addBean(methodFactory.build());
-        TypeSpec clazz = ClassUtils.createPublicClassBuilder(clazzName + "$$AutoCLazz",
+        TypeSpec clazz = ClassUtils.createPublicClassBuilder(
+                clazzName,
                 methodSpecListFactory.getList())
                 .addSuperinterface(ClassName.get(pathTypeElement))
                 .build();
